@@ -1,0 +1,131 @@
+USER
+userId: string;
+email!: string;
+password!: string;
+profile!: Profile;
+carts!: Cart[];
+shipping!: Shipping[];
+billing!: Billing[];
+registrationDate!: Date;
+updatedAt!: Date;
+lastLoginDate!: Date;
+version!: number;
+
+SHIPPING
+id!: number;
+isActive!: boolean;
+contactName!: string;
+city!: string;
+country!: string;
+address!: string;
+zipCode!: string;
+user: User;
+createdAt!: Date;
+updatedAt!: Date;
+version!: number;
+
+BILLING
+id!: number;
+isActive!: boolean;
+contactName!: string | null;
+city!: string | null;
+country!: string | null;
+address!: string | null;
+zipCode!: string | null;
+user: User;
+createdAt!: Date;
+updatedAt!: Date;
+version!: number;
+
+PROFILE
+id!: number;
+name!: string | null;
+surname!: string | null;
+gsmNumber!: string | null;
+identityNumber!: string | null;
+registrationAddress!: string | null;
+ip!: string | null;
+city!: string | null;
+country!: string | null;
+zipCode!: string | null;
+user: User;
+createdAt!: Date;
+updatedAt!: Date;
+version!: number;
+
+ITEMS
+id!: string;
+code!: string | null;
+name!: string | null;
+price!: string | null;
+image!: string | null;
+category1!: string | null;
+category2!: string | null;
+isOnSale!: boolean;
+isInStock!: boolean;
+stock!: number | null;
+itemtype!: string;
+createdAt!: Date;
+updatedAt!: Date;
+version!: number;
+
+CART
+basketId!: string;
+isPurchased!: boolean;
+price!: number | null;
+paidPrice: number | null;
+user: User;
+basketItems: Item[];
+currency!: string;
+installment!: number;
+createdAt!: Date;
+updatedAt!: Date;
+version!: number;
+
+passrules :)
+{
+
+    "isSuccess": true,
+    "statusCode": 200,
+    "result": {
+        "rules": [
+            {
+                "key": "INVALID_PASS_LENGTH",
+                "value": "^.{7,15}$",
+                "message": "Şifreniz 7 ile 15 karakter arasında olmalıdır."
+            },
+            {
+                "key": "AT_LEAST_ONE_CHARACTER",
+                "value": "^.*[a-zA-Z].*$",
+                "message": "Şifreniz en az 1 harf içermelidir."
+            },
+            {
+                "key": "AT_LEAST_ONE_NUMBER",
+                "value": "^.*[0-9].*$",
+                "message": "Şifreniz en az 1 rakam içermelidir."
+            }
+        ],
+        "strongTypes": [
+            {
+                "priority": 1,
+                "key": "PASSWORD_STRONG_LOW",
+                "value": "^(?=.*[0-9])(?=.*[a-zA-Z]).{7,15}$",
+                "message": "Zayıf Şifre"
+            },
+            {
+                "priority": 2,
+                "key": "PASSWORD_STRONG_MEDIUM",
+                "value": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{7,15}$",
+                "message": "Orta Şifre"
+            },
+            {
+                "priority": 3,
+                "key": "PASSWORD_STRONG_HIGH",
+                "value": "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[.:;,_'!?*@#$%^&+=]).{7,15}$",
+                "message": "Güçlü Şifre"
+            }
+        ]
+    },
+    "headers": { }
+
+}
