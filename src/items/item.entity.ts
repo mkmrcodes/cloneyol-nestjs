@@ -33,10 +33,10 @@ export class Item extends BaseEntity {
   })
   code!: string;
 
-  @Column({ type: 'character varying', length: 100 })
+  @Column({ type: 'character varying', length: 250 })
   name!: string;
 
-  @Column({ type: 'character varying', length: 100 })
+  @Column({ type: 'character varying', length: 250 })
   slug!: string;
 
   @Column({ type: 'int', default: 1 })
@@ -60,8 +60,11 @@ export class Item extends BaseEntity {
   @Column({ type: 'boolean', default: false })
   isCargoFree!: boolean;
 
-  @Column({ type: 'character varying', length: 100, nullable: true })
+  @Column({ type: 'character varying', length: 250, nullable: true })
   image!: string | null;
+
+  @Column({ type: 'character varying', length: 250, nullable: true })
+  zoomImg!: string | null;
 
   @ManyToOne(() => Category, { eager: true })
   category: Category;

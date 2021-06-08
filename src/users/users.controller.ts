@@ -51,7 +51,7 @@ export class UsersController {
     return this.usersService.deleteUser(id);
   }
 
-  @Patch('/:id/update')
+  @Patch('/:id')
   updateUser(
     @Param('id') id: string,
     @Body() createUserDto: CreateUserDto,

@@ -20,4 +20,10 @@ export class GetItemsFilterDto {
   @IsOptional()
   @IsNotEmpty()
   pr: string;
+  @IsOptional()
+  @IsNotEmpty()
+  sst: string;
+  @IsOptional()
+  @IsNotEmpty()
+  q: string;
 }

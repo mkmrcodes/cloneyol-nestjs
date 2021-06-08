@@ -1,4 +1,5 @@
 import slugify from 'slugify';
+import { Brand } from 'src/brand/brand.entity';
 import { Category } from 'src/category/category.entity';
 import { Rating } from 'src/ratings/rating.entity';
 import {
@@ -14,7 +15,7 @@ import { Item } from './item.entity';
 @EntityRepository(Item)
 export class ItemRepository extends Repository<Item> {
   async getItems(getItemsFilterDto: GetItemsFilterDto): Promise<Item[]> {
-    const { search, wc, wb, fc, prc, pr } = getItemsFilterDto;
+    const { search, wc, wb, fc, prc, pr, sst, q } = getItemsFilterDto;
     let brandsArr;
     if (wb) {
       brandsArr = wb.split(',').map((x) => +x);
@@ -27,7 +28,7 @@ export class ItemRepository extends Repository<Item> {
       .leftJoinAndSelect('items.rating', 'rating');
 
     if (search) {
-      query.andWhere('items.code LIKE :search', {
+      query.where('items.code LIKE :search', {
         search: `%${search}%`,
       });
     }
@@ -62,6 +63,7 @@ export class ItemRepository extends Repository<Item> {
         fc: fc,
       });
     }
+
     let prcstart;
     let prcend;
     if (prc) {
@@ -69,6 +71,30 @@ export class ItemRepository extends Repository<Item> {
       prcstart = prcRange[0];
       prcend = prcRange[1];
       query.andWhere(`items.price between ${prcstart} and ${prcend}`);
+    }
+    if (sst) {
+      if (sst === 'PRICE_BY_ASC') {
+        query.orderBy('items.price', 'ASC');
+      } else if (sst === 'PRICE_BY_DESC') {
+        query.orderBy('items.price', 'DESC');
+      } else if (sst === 'MOST_RATED') {
+        query.orderBy('"rating"."ratingCount"', 'DESC');
+      } else if (sst === 'MOST_RECENT') {
+        query.orderBy('items.updatedAt', 'DESC');
+      }
+    }
+
+    if (q) {
+      const sq = this.createQueryBuilder('items');
+      sq.select('items.name');
+      sq.addSelect('items.id');
+      sq.addSelect('items.slug');
+      sq.where(
+        `to_tsvector('pg_catalog.turkish',items.name) @@ to_tsquery('pg_catalog.turkish', :query)`,
+        { query: `${q.replace(' ', '+')}:*` },
+      );
+      const sResults = await sq.getMany();
+      return sResults;
     }
     //console.log(query.getSql());
     const items = await query.getMany();
@@ -116,6 +142,7 @@ export class ItemRepository extends Repository<Item> {
       price,
       isCargoFree,
       image,
+      zoomImg,
       category,
       promotion,
       basketLimit,
@@ -146,6 +173,7 @@ export class ItemRepository extends Repository<Item> {
     item.discountPrice = discountPrice;
     item.isCargoFree = isCargoFree;
     item.image = image;
+    item.zoomImg = zoomImg;
     item.category = category;
     item.promotion = promotion;
     item.basketLimit = basketLimit;

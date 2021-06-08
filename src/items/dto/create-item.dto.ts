@@ -20,6 +20,8 @@ export class CreateItemDto {
   @IsNotEmpty()
   image!: string;
   @IsNotEmpty()
+  zoomImg!: string;
+  @IsNotEmpty()
   category!: Category;
   @IsNotEmpty()
   promotion: Promotion;
